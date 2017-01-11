@@ -26,26 +26,26 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-wc-added-to-cart-notification-activator.php
+ * This action is documented in includes/class-wcatcn-activator.php
  */
 function activate_wc_added_to_cart_notification() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wc-added-to-cart-notification-activator.php';
-	Wc_Added_To_Cart_Notification_Activator::activate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wcatcn-activator.php';
+	WCATCN_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-wc-added-to-cart-notification-deactivator.php
+ * This action is documented in includes/class-wcatcn-deactivator.php
  */
 function deactivate_wc_added_to_cart_notification() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wc-added-to-cart-notification-deactivator.php';
-	Wc_Added_To_Cart_Notification_Deactivator::deactivate();
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-wcatcn-deactivator.php';
+	WCATCN_Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_wc_added_to_cart_notification' );
@@ -68,7 +68,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wc-added-to-cart-notificat
  */
 function run_wc_added_to_cart_notification() {
 
-	$plugin = new Wc_Added_To_Cart_Notification();
+	$plugin = new WC_Added_To_Cart_Notification();
 	$plugin->run();
 
 }

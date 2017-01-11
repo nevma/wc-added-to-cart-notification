@@ -21,7 +21,7 @@
  * @subpackage Wc_Added_To_Cart_Notification/includes
  * @author     Nevma <info@nevma.gr>
  */
-class Wc_Added_To_Cart_Notification_Loader {
+class WCATCN_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

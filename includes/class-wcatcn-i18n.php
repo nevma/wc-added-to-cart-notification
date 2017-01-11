@@ -24,7 +24,7 @@
  * @subpackage Wc_Added_To_Cart_Notification/includes
  * @author     Nevma <info@nevma.gr>
  */
-class Wc_Added_To_Cart_Notification_i18n {
+class WCATCN_i18n {
 
 
 	/**

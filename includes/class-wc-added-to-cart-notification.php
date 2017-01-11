@@ -27,7 +27,7 @@
  * @subpackage Wc_Added_To_Cart_Notification/includes
  * @author     Nevma <info@nevma.gr>
  */
-class Wc_Added_To_Cart_Notification {
+class WC_Added_To_Cart_Notification {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +35,7 @@ class Wc_Added_To_Cart_Notification {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Wc_Added_To_Cart_Notification_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      WCATCN_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -83,10 +83,10 @@ class Wc_Added_To_Cart_Notification {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Wc_Added_To_Cart_Notification_Loader. Orchestrates the hooks of the plugin.
-	 * - Wc_Added_To_Cart_Notification_i18n. Defines internationalization functionality.
-	 * - Wc_Added_To_Cart_Notification_Admin. Defines all hooks for the admin area.
-	 * - Wc_Added_To_Cart_Notification_Public. Defines all hooks for the public side of the site.
+	 * - WCATCN_Loader. Orchestrates the hooks of the plugin.
+	 * - WCATCN_i18n. Defines internationalization functionality.
+	 * - WCATCN_Admin. Defines all hooks for the admin area.
+	 * - WCATCN_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -100,33 +100,33 @@ class Wc_Added_To_Cart_Notification {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-added-to-cart-notification-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wcatcn-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wc-added-to-cart-notification-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wcatcn-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wc-added-to-cart-notification-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wcatcn-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wc-added-to-cart-notification-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wcatcn-public.php';
 
-		$this->loader = new Wc_Added_To_Cart_Notification_Loader();
+		$this->loader = new WCATCN_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Wc_Added_To_Cart_Notification_i18n class in order to set the domain and to register the hook
+	 * Uses the WCATCN_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -134,7 +134,7 @@ class Wc_Added_To_Cart_Notification {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Wc_Added_To_Cart_Notification_i18n();
+		$plugin_i18n = new WCATCN_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -149,7 +149,7 @@ class Wc_Added_To_Cart_Notification {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Wc_Added_To_Cart_Notification_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new WCATCN_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -165,7 +165,7 @@ class Wc_Added_To_Cart_Notification {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Wc_Added_To_Cart_Notification_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new WCATCN_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -196,7 +196,7 @@ class Wc_Added_To_Cart_Notification {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Wc_Added_To_Cart_Notification_Loader    Orchestrates the hooks of the plugin.
+	 * @return    WCATCN_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;

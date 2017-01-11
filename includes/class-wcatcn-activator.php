@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Fired during plugin deactivation
+ * Fired during plugin activation
  *
  * @link       https://www.nevma.gr
  * @since      1.0.0
@@ -11,16 +11,16 @@
  */
 
 /**
- * Fired during plugin deactivation.
+ * Fired during plugin activation.
  *
- * This class defines all code necessary to run during the plugin's deactivation.
+ * This class defines all code necessary to run during the plugin's activation.
  *
  * @since      1.0.0
  * @package    Wc_Added_To_Cart_Notification
  * @subpackage Wc_Added_To_Cart_Notification/includes
  * @author     Nevma <info@nevma.gr>
  */
-class Wc_Added_To_Cart_Notification_Deactivator {
+class WCATCN_Activator {
 
 	/**
 	 * Short Description. (use period)
@@ -29,7 +29,7 @@ class Wc_Added_To_Cart_Notification_Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
-	public static function deactivate() {
+	public static function activate() {
 
 	}
 
