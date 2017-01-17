@@ -100,4 +100,16 @@ class WCATCN_Public {
 
 	}
 
+	public function display() {
+
+		if ( apply_filters( 'wcatcn_display', is_woocommerce() ) ) {
+
+			WCATCN_Loader::get_template( 'wrapper', 'start' );
+
+			WCATCN_Loader::get_template( 'mini-cart' );
+
+			WCATCN_Loader::get_template( 'wrapper', 'end' );
+		}
+	}
+
 }
