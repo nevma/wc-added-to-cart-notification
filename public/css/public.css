@@ -1,4 +1,15 @@
 /**
- * All of the CSS for your public-facing functionality should be
- * included in this file.
+ * Public CSS
  */
+
+.wcatcn-wrapper {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	transform: translateX(100%);
+	transition: transform 1s;
+}
+
+.wcatcn-wrapper.active {
+	transform: none;
+}
