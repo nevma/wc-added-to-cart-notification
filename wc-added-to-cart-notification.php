@@ -1,12 +1,6 @@
 <?php
 
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
  *
  * @link              https://www.nevma.gr
  * @since             1.0.0
@@ -15,7 +9,7 @@
  * @wordpress-plugin
  * Plugin Name:       Added to cart notification for WooCommerce
  * Plugin URI:        https://github.com/nevma/wc-added-to-cart-notification
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Provides feedback to the user when a product is added to the cart, by displaying a closeable notification popup. The notification contains the mini-cart, some basic cart info (totals etc), and can be further customised to include extra information.
  * Version:           1.0.0
  * Author:            Nevma
  * Author URI:        https://www.nevma.gr

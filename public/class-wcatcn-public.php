@@ -40,6 +40,8 @@ class WCATCN_Public {
 	 */
 	private $version;
 
+	private $is_enabled;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -78,14 +80,37 @@ class WCATCN_Public {
 
 	public function display() {
 
-		if ( apply_filters( 'wcatcn_display', is_woocommerce() ) ) {
+		// Display only on WooCommerce pages.
+		if ( ! apply_filters( 'wcatcn_display', is_woocommerce() ) ) {
 
-			WCATCN_Loader::get_template( 'wrapper', 'start' );
+			return;
 
-			WCATCN_Loader::get_template( 'mini-cart' );
-
-			WCATCN_Loader::get_template( 'wrapper', 'end' );
 		}
+
+		WCATCN_Loader::get_template( 'wrapper', 'start' );
+
+		echo $this->get_mini_cart();
+
+		WCATCN_Loader::get_template( 'wrapper', 'end' );
+
+	}
+
+	public function get_mini_cart() {
+
+		ob_start();
+
+		WCATCN_Loader::get_template( 'mini-cart' );
+
+		return ob_get_clean();
+
+	}
+
+	public function update_cart_fragments( $fragments ) {
+
+		$fragments['div.wcatcn-mini-cart-container'] = $this->get_mini_cart();
+
+		return $fragments;
+		
 	}
 
 }
