@@ -2,6 +2,8 @@
  * Public CSS
  */
 
+@import url('fonts.css');
+
 .wcatcn-wrapper {
 	box-sizing: border-box;
 	position: fixed;
@@ -16,6 +18,8 @@
 	overflow-y: scroll;
 	background: white;
 }
+
+/* Positioning */
 
 .wcatcn-wrapper.left,
 .wcatcn-wrapper.right {
@@ -57,6 +61,26 @@
 	border-right: none;
 }
 
+/* Activation */
 .wcatcn-wrapper.active {
 	transform: none !important;
+}
+
+/* Dismissal */
+.wcatcn-dismiss {
+	display: inline-block;
+}
+
+.wcatcn-dismiss:before,
+.wcatcn-dismiss:after {
+	font-family: 'wcatcn' !important;
+	display: inline-block;
+}
+.wcatcn-wrapper.right .wcatcn-dismiss:before {
+	content: "\e901";
+	margin-right: 1em;
+}
+.wcatcn-wrapper.left .wcatcn-dismiss:after {
+	content: "\e902";
+	margin-left: 1em;
 }

@@ -1,0 +1,49 @@
+@font-face {
+  font-family: 'wcatcn';
+  src:  url('../fonts/wc-added-to-cart-notification.eot?z307no');
+  src:  url('../fonts/wc-added-to-cart-notification.eot?z307no#iefix') format('embedded-opentype'),
+    url('../fonts/wc-added-to-cart-notification.ttf?z307no') format('truetype'),
+    url('../fonts/wc-added-to-cart-notification.woff?z307no') format('woff'),
+    url('../fonts/wc-added-to-cart-notification.svg?z307no#wc-added-to-cart-notification') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/*
+.icon-wcatcn-up-with-circle:before {
+  content: "\e900";
+}
+.icon-wcatcn-right-with-circle:before {
+  content: "\e901";
+}
+.icon-wcatcn-left-with-circle:before {
+  content: "\e902";
+}
+.icon-wcatcn-down-with-circle:before {
+  content: "\e903";
+}
+.icon-wcatcn-up:before {
+  content: "\e904";
+}
+.icon-wcatcn-right:before {
+  content: "\e905";
+}
+.icon-wcatcn-left:before {
+  content: "\e906";
+}
+.icon-wcatcn-down:before {
+  content: "\e907";
+}
+.icon-wcatcn-small-up:before {
+  content: "\e908";
+}
+.icon-wcatcn-small-right:before {
+  content: "\e909";
+}
+.icon-wcatcn-small-left:before {
+  content: "\e90a";
+}
+.icon-wcatcn-small-down:before {
+  content: "\e90b";
+}
+
+*/

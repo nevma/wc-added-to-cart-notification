@@ -22,6 +22,12 @@ jQuery( function ( $ ) {
 
 	$( document.body ).on( 'added_to_cart', wcatcnActivate );
 
-	$( '.wcatcn-wrapper .button-close' ).click( wcatcnDeactivate );
+	$( '.wcatcn-dismiss' ).click( function(e) {
+
+		wcatcnDeactivate();
+		
+		return false;
+
+	} );
 
 });
