@@ -54,6 +54,8 @@ class WCATCN_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		$this->setup_notification_components();
+
 	}
 
 	/**
@@ -89,19 +91,15 @@ class WCATCN_Public {
 
 		WCATCN_Loader::get_template( 'wrapper', 'start' );
 
-		echo $this->get_mini_cart();
+		do_action( 'wcatcn_display_components' );
 
 		WCATCN_Loader::get_template( 'wrapper', 'end' );
 
 	}
 
-	public function get_mini_cart() {
-
-		ob_start();
+	public function mini_cart() {
 
 		WCATCN_Loader::get_template( 'mini-cart' );
-
-		return ob_get_clean();
 
 	}
 
@@ -111,6 +109,11 @@ class WCATCN_Public {
 
 		return $fragments;
 		
+	}
+
+	private function setup_notification_components() {
+
+		add_action( 'wcatcn_display_components', array( $this, 'mini_cart' ) );
 	}
 
 }
