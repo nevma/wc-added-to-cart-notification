@@ -103,6 +103,12 @@ class WCATCN_Public {
 
 	}
 
+	public function cross_sells() {
+
+		WCATCN_Loader::get_template( 'cross-sells' );
+
+	}
+
 	public function update_cart_fragments( $fragments ) {
 
 		$fragments['div.wcatcn-mini-cart-container'] = $this->get_mini_cart();
@@ -114,6 +120,7 @@ class WCATCN_Public {
 	private function setup_notification_components() {
 
 		add_action( 'wcatcn_display_components', array( $this, 'mini_cart' ) );
+		add_action( 'wcatcn_display_components', array( $this, 'cross_sells' ) );
 	}
 
 }
