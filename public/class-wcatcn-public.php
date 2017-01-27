@@ -103,6 +103,15 @@ class WCATCN_Public {
 
 	}
 
+	public function get_mini_cart() {
+
+		ob_start();
+
+		$this->mini_cart();
+
+		return ob_get_clean();
+	}
+
 	public function cross_sells() {
 
 		WCATCN_Loader::get_template( 'cross-sells' );

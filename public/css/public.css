@@ -9,54 +9,44 @@
 	position: fixed;
 	bottom: 0;
 	right: 0;
+	left: 0;
 	transition: transform 1s;
 	z-index: 1000;
 	border: 3px solid #999;
+	border-bottom: none;
 	padding: 1em;
-	width: 100%;
 	max-height: 40vh;
 	overflow-y: scroll;
 	background: white;
+	transform: translateY(100%);
+	font-size: 14px;
 }
+
+	.wcatcn-container {
+		position: relative;
+		padding-top: 1em;
+	}
 
 /* Positioning */
 
-.wcatcn-wrapper.left,
-.wcatcn-wrapper.right {
-	width: auto;
+.wcatcn-wrapper.bottom-left,
+.wcatcn-wrapper.bottom-right {
 	max-height: 75vh;
 }
-.wcatcn-wrapper.left {
+.wcatcn-wrapper.bottom-left {
 	left: 0;
 	right: auto;
 	transform: translateX(-100%);
 	border-left: none;
 }
-.wcatcn-wrapper.right {
+.wcatcn-wrapper.bottom-right {
 	left: auto;
 	right: 0;
 	transform: translateX(100%);
 	border-right: none;
 }
 
-.wcatcn-wrapper.bottom {
-	top: auto;
-	bottom: 0;
-	border-bottom: none;
-}
-.wcatcn-wrapper.bottom:not(.left):not(.right) {
-	transform: translateY(100%);
-	border-left: none;
-	border-right: none;
-}
-
-.wcatcn-wrapper.top {
-	top: 0;
-	bottom: auto;
-	border-top: none;
-}
-.wcatcn-wrapper.top:not(.left):not(.right) {
-	transform: translateY(-100%);
+.wcatcn-wrapper.bottom:not(.bottom-left):not(.bottom-right) {
 	border-left: none;
 	border-right: none;
 }
@@ -69,27 +59,34 @@
 /* Dismissal */
 .wcatcn-dismiss {
 	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+.wcatcn-wrapper.bottom-right .wcatcn-dismiss {
+	left: 0;
+	right: auto;
+	transform: none;
+}
+.wcatcn-wrapper.bottom-left .wcatcn-dismiss {
+	left: auto;
+	right: 0;
+	transform: none;
 }
 
-.wcatcn-dismiss:before,
-.wcatcn-dismiss:after {
-	font-family: 'wcatcn' !important;
-	display: inline-block;
-}
+	.wcatcn-dismiss:after {
+		font-family: 'wcatcn' !important;
+		display: inline-block;
+		content: "\e907";
+		margin-left: 1em;
+	}
+	.wcatcn-wrapper.bottom-right .wcatcn-dismiss:after {
+		content: "\e905";
+		margin-left: 1em;
+	}
+	.wcatcn-wrapper.bottom-left .wcatcn-dismiss:after {
+		content: "\e906";
+		margin-left: 1em;
+	}
 
-.wcatcn-wrapper.top .wcatcn-dismiss:after {
-	content: "\e900";
-	margin-left: 1em;
-}
-.wcatcn-wrapper.bottom .wcatcn-dismiss:after {
-	content: "\e903";
-	margin-left: 1em;
-}
-.wcatcn-wrapper.right .wcatcn-dismiss:before {
-	content: "\e901";
-	margin-right: 1em;
-}
-.wcatcn-wrapper.left .wcatcn-dismiss:after {
-	content: "\e902";
-	margin-left: 1em;
-}
