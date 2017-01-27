@@ -20,5 +20,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 	<div class = "wcatcn-cross-sells-container">
-		<?php woocommerce_cross_sell_display( 5, 5 ); ?>
+		<?php woocommerce_cross_sell_display(); ?>
 	</div>

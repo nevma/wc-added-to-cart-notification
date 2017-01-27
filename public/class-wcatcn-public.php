@@ -114,7 +114,39 @@ class WCATCN_Public {
 
 	public function cross_sells() {
 
+		/**
+		 * Total cross-sells items, as well as columns, will be filtered
+		 * from within WooCommerce's native template, regardless whatever
+		 * values this plugin may set.
+		 *
+		 * To overcome this, the plugin exposes its own filters for these
+		 * values (so that the user doesn't have to deal with priorities and
+		 * stuff.
+		 *
+		 * It then attempts to enforce those filtered values by hooking on
+		 * WooCommerce's native filters at an insanely late priority, produce
+		 * its output, and then unhook again so that cross-sells displayed at
+		 * other areas are not affected by the plugin's options.
+		 */
+		add_filter( 'woocommerce_cross_sells_total', array( $this, 'filter_cross_sells_total' ), 999 );
+		add_filter( 'woocommerce_cross_sells_columns', array( $this, 'filter_cross_sells_columns' ), 999 );
+
 		WCATCN_Loader::get_template( 'cross-sells' );
+
+		remove_filter( 'woocommerce_cross_sells_total', array( $this, 'filter_cross_sells_total' ), 999 );
+		remove_filter( 'woocommerce_cross_sells_columns', array( $this, 'filter_cross_sells_columns' ), 999 );
+
+	}
+
+	public function filter_cross_sells_total() {
+
+		return apply_filters( 'wcatcn_cross_sells_total', 4 );
+
+	}
+
+	public function filter_cross_sells_columns() {
+
+		return apply_filters( 'wcatcn_cross_sells_columns', 4 );
 
 	}
 
@@ -130,6 +162,7 @@ class WCATCN_Public {
 
 		add_action( 'wcatcn_display_components', array( $this, 'mini_cart' ) );
 		add_action( 'wcatcn_display_components', array( $this, 'cross_sells' ) );
+
 	}
 
 }
