@@ -17,8 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<div class = "wcatcn-wrapper bottom-right">
+<div class = "wcatcn-wrapper bottom-right active">
 
-	<div class = "wcatcn-container">
-
-		<a class = "wcatcn-dismiss" href = "#" rel = "nofollow">Hide</a>
+	<div class = "wcatcn-dismiss-container"><a class = "wcatcn-dismiss" href = "#" rel = "nofollow"><?php _e( 'Hide' ); ?></a></div>

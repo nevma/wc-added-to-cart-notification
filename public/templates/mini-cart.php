@@ -20,5 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 	<div class = "wcatcn-mini-cart-container">
+		<h2><?php _e( 'Cart', 'woocommerce' ); ?></h2>
 		<?php woocommerce_mini_cart(); ?>
 	</div>
