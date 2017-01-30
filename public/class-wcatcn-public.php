@@ -138,6 +138,16 @@ class WCATCN_Public {
 
 	}
 
+	public function get_cross_sells() {
+
+		ob_start();
+
+		$this->cross_sells();
+
+		return ob_get_clean();
+		
+	}
+
 	public function filter_cross_sells_total() {
 
 		return apply_filters( 'wcatcn_cross_sells_total', 4 );
