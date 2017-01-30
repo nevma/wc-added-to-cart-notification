@@ -30,6 +30,7 @@
 
 .wcatcn-wrapper.bottom-left,
 .wcatcn-wrapper.bottom-right {
+	max-width: 30vw;
 	max-height: 75vh;
 }
 .wcatcn-wrapper.bottom-left {
@@ -96,7 +97,7 @@
 /* CROSS SELLS */
 
 .wcatcn-cross-sells-container .products .product {
-	width: 24%;
+	width: 23.5%;
 	margin-left: 2%;
 }
 .wcatcn-cross-sells-container .products .product.first {
