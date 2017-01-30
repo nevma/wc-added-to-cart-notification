@@ -40,8 +40,6 @@ class WCATCN_Public {
 	 */
 	private $version;
 
-	private $is_enabled;
-
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -54,7 +52,7 @@ class WCATCN_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-		$this->setup_notification_components();
+		$this->add_notification_components();
 
 	}
 
@@ -72,7 +70,7 @@ class WCATCN_Public {
 	/**
 	 * Register the JavaScript for the front-end
 	 *
-	 * @since    1.0.0
+	 * @since 1.0.0
 	 */
 	public function enqueue_scripts() {
 
@@ -80,6 +78,11 @@ class WCATCN_Public {
 
 	}
 
+	/**
+	 * Display the whole output
+	 *
+	 * @since 1.0.0
+	 */
 	public function display() {
 
 		// Display only on WooCommerce pages.
@@ -97,12 +100,23 @@ class WCATCN_Public {
 
 	}
 
+	/**
+	 * Display the mini-cart section
+	 *
+	 * @since  1.0.0
+	 */
 	public function mini_cart() {
 
 		WCATCN_Loader::get_template( 'mini-cart' );
 
 	}
 
+	/**
+	 * Return the mini-cart section as a string
+	 *
+	 * @since  1.0.0
+	 * @return string The markup of the mini-cart section.
+	 */
 	public function get_mini_cart() {
 
 		ob_start();
@@ -112,6 +126,11 @@ class WCATCN_Public {
 		return ob_get_clean();
 	}
 
+	/**
+	 * Display the cross-sells section
+	 *
+	 * @since 1.0.0
+	 */
 	public function cross_sells() {
 
 		/**
@@ -138,6 +157,12 @@ class WCATCN_Public {
 
 	}
 
+	/**
+	 * Return the cross-sells section as a string
+	 * 
+	 * @since 1.0.0
+	 * @return string The markup of the cross-sells section.
+	 */
 	public function get_cross_sells() {
 
 		ob_start();
@@ -145,22 +170,47 @@ class WCATCN_Public {
 		$this->cross_sells();
 
 		return ob_get_clean();
-		
+
 	}
 
+	/**
+	 * Filter the number of products when displaying cross-sells.
+	 *
+	 * @since 1.0.0
+	 * @return int The maximum total number of cross-sells products to
+	 *             display.
+	 */
 	public function filter_cross_sells_total() {
 
 		return apply_filters( 'wcatcn_cross_sells_total', 4 );
 
 	}
 
+	/**
+	 * Filter the number of columsn when displaying cross-sells.
+	 *
+	 * @since  1.0.0
+	 * @return int The number of columns in which to arrange the cross-sells
+	 *             products.
+	 */
 	public function filter_cross_sells_columns() {
 
 		return apply_filters( 'wcatcn_cross_sells_columns', 4 );
 
 	}
 
-	public function update_cart_fragments( $fragments ) {
+	/**
+	 * Filter the cart fragments.
+	 *
+	 * Filters WooCommerce's cart fragments in order to include the mini-cart
+	 * section displayed by the plugin, so that it is updated when needed
+	 * (e.g. whenever a product is added to the cart).
+	 *
+	 * @since  1.0.0
+	 * @param  array $fragments The unfiltered fragments.
+	 * @return array            The filtered fragments.
+	 */
+	public function filter_cart_fragments( $fragments ) {
 
 		$fragments['div.wcatcn-mini-cart-container'] = $this->get_mini_cart();
 
@@ -168,7 +218,15 @@ class WCATCN_Public {
 		
 	}
 
-	private function setup_notification_components() {
+	/**
+	 * Add the notification components to the display action.
+	 *
+	 * The components are added as actions so as to let plugins and themes
+	 * change their order, or disable some or all of them alltogether.
+	 *
+	 * @since  1.0.0
+	 */
+	private function add_notification_components() {
 
 		add_action( 'wcatcn_display_components', array( $this, 'mini_cart' ) );
 		add_action( 'wcatcn_display_components', array( $this, 'cross_sells' ) );
