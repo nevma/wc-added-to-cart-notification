@@ -58,6 +58,14 @@ class WC_Added_To_Cart_Notification {
 	protected $version;
 
 	/**
+	 * The single instance of the class.
+	 *
+	 * @since 1.0.0
+	 * @var WC_Added_To_Cart_Notification The main instance of this plugin.
+	 */
+	protected static $_instance;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -66,7 +74,7 @@ class WC_Added_To_Cart_Notification {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
+	protected function __construct() {
 
 		$this->plugin_name = 'wc-added-to-cart-notification';
 		$this->version = '1.0.0';
@@ -76,6 +84,40 @@ class WC_Added_To_Cart_Notification {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
+	}
+
+	/**
+	 * Returns the main plugin's instance.
+	 *
+	 * Ensures that no more than one instances of the plugin will be created.
+	 *
+	 * @since 1.0.0
+	 * @static
+	 * @return The main instance of the plugin.
+	 */
+	public static function instance() {
+
+		if ( is_null( self::$_instance ) ) {
+
+			self::$_instance = new self();
+
+		}
+
+		return self::$_instance;
+	}
+
+	/**
+	 * Forbids instance cloning.
+	 * @since 1.0.0
+	 */
+	private function __clone() {
+	}
+
+	/**
+	 * Forbid isntance unserializing.
+	 * @since 1.0.0
+	 */
+	private function __wakeup() {
 	}
 
 	/**

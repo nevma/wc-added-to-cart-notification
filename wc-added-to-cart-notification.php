@@ -52,18 +52,15 @@ register_deactivation_hook( __FILE__, 'deactivate_wc_added_to_cart_notification'
 require plugin_dir_path( __FILE__ ) . 'includes/class-wc-added-to-cart-notification.php';
 
 /**
- * Begins execution of the plugin.
+ * Begins execution of the plugin and returns the plugin's main instance.
  *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
+ * @return WC_Added_To_Cart_Notification
  * @since    1.0.0
  */
-function run_wc_added_to_cart_notification() {
+function wcatcn() {
 
-	$plugin = new WC_Added_To_Cart_Notification();
-	$plugin->run();
+	return WC_Added_To_Cart_Notification::instance();
 
 }
-run_wc_added_to_cart_notification();
+
+wcatcn()->run();
