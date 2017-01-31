@@ -1,7 +1,25 @@
 jQuery( function ( $ ) {
 
 	// The deactivation timeout handler
-	var deactivationTimeout;
+	var deactivationTimeoutHandler;
+
+	var defaults = {
+		'deactivationTimeout'         : 5000,
+		'deactivationTimeoutExtended' : 1000,
+		'activationEvent'             : 'added_to_cart',
+		'element'                     : '.wcatcn-wrapper',
+		'dismiss'                     : '.wcatcn-dismiss',
+	}
+
+	var options = defaults;
+
+	var $notification = $( options.element );
+
+	if ( $notification.length < 1 ) {
+
+		return;
+
+	}
 
 	/**
 	 * Activates (shows) the notification, and renews the deactivation
@@ -10,13 +28,13 @@ jQuery( function ( $ ) {
 	function wcatcnActivate() {
 
 		// Prevent deactivation, if scheduled
-		clearTimeout( deactivationTimeout );
+		clearTimeout( deactivationTimeoutHandler );
 
 		// Enable the notification
-		$( '.wcatcn-wrapper' ).addClass( 'active' );
+		$notification.addClass( 'active' );
 
 		// Set a deactivation timeout anew.
-		deactivationTimeout = setTimeout( wcatcnDeactivate, 5000 );
+		deactivationTimeoutHandler = setTimeout( wcatcnDeactivate, options.deactivationTimeout );
 
 	}
 
@@ -30,16 +48,16 @@ jQuery( function ( $ ) {
 	 */
 	function wcatcnDeactivate() {
 
-		$( '.wcatcn-wrapper' ).removeClass( 'active' );
+		$notification.removeClass( 'active' );
 
-		clearTimeout( deactivationTimeout );
+		clearTimeout( deactivationTimeoutHandler );
 	}
 
 	// Activate the notification on the added_to_cart event
-	$( document.body ).on( 'added_to_cart', wcatcnActivate );
+	$( document.body ).on( options.activationEvent, wcatcnActivate );
 
 	// Dismiss the notification when the "Hide" option is clicked
-	$( '.wcatcn-dismiss' ).click( function(e) {
+	$( options.dismiss ).click( function(e) {
 
 		wcatcnDeactivate();
 		
