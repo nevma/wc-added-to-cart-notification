@@ -202,9 +202,9 @@ class WCATCN_Public {
 	/**
 	 * Filter the cart fragments.
 	 *
-	 * Filters WooCommerce's cart fragments in order to include the mini-cart
-	 * section displayed by the plugin, so that it is updated when needed
-	 * (e.g. whenever a product is added to the cart).
+	 * Filters WooCommerce's cart fragments in order to update cart-related
+	 * information inside the notification, whenever a product is added to the
+	 * cart via AJAX.
 	 *
 	 * @since  1.0.0
 	 * @param  array $fragments The unfiltered fragments.
@@ -213,6 +213,7 @@ class WCATCN_Public {
 	public function filter_cart_fragments( $fragments ) {
 
 		$fragments['div.wcatcn-mini-cart-container'] = $this->get_mini_cart();
+		$fragments['div.wcatcn-cross-sells-container'] = $this->get_cross_sells();
 
 		return $fragments;
 		
