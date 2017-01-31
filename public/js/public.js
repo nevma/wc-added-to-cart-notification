@@ -1,28 +1,63 @@
 jQuery( function ( $ ) {
 
-	var deactivationTimeout;
+	// The deactivation timeout handler
+	var deactivationTimeoutHandler;
 
+	var defaults = {
+		'deactivationTimeout'         : 5000,
+		'deactivationTimeoutExtended' : 1000,
+		'activationEvent'             : 'added_to_cart',
+		'element'                     : '.wcatcn-wrapper',
+		'dismiss'                     : '.wcatcn-dismiss',
+	}
+
+	var options = defaults;
+
+	var $notification = $( options.element );
+
+	if ( $notification.length < 1 ) {
+
+		return;
+
+	}
+
+	/**
+	 * Activates (shows) the notification, and renews the deactivation
+	 * timeout.
+	 */
 	function wcatcnActivate() {
 
-		clearTimeout( deactivationTimeout );
+		// Prevent deactivation, if scheduled
+		clearTimeout( deactivationTimeoutHandler );
 
-		$( '.wcatcn-wrapper' ).addClass( 'active' );
+		// Enable the notification
+		$notification.addClass( 'active' );
 
-		deactivationTimeout = setTimeout( wcatcnDeactivate, 2000 );
+		// Set a deactivation timeout anew.
+		deactivationTimeoutHandler = setTimeout( wcatcnDeactivate, options.deactivationTimeout );
 
 	}
 
+	/**
+	 * Deactivates (hides) the notification, and clears the deactivation
+	 * timeout.
+	 *
+	 * Clearing the deactivation timeout is necessary since the notification
+	 * can be dismissed on-demand by the user, thus leaving a stray
+	 * deactivation scheduled.
+	 */
 	function wcatcnDeactivate() {
 
-		$( '.wcatcn-wrapper' ).removeClass( 'active' );
+		$notification.removeClass( 'active' );
 
-		// Clear timeout in case deactivation was triggered by user.
-		clearTimeout( deactivationTimeout );
+		clearTimeout( deactivationTimeoutHandler );
 	}
 
-	$( document.body ).on( 'added_to_cart', wcatcnActivate );
+	// Activate the notification on the added_to_cart event
+	$( document.body ).on( options.activationEvent, wcatcnActivate );
 
-	$( '.wcatcn-dismiss' ).click( function(e) {
+	// Dismiss the notification when the "Hide" option is clicked
+	$( options.dismiss ).click( function(e) {
 
 		wcatcnDeactivate();
 		

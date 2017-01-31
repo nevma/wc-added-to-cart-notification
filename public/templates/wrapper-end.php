@@ -16,6 +16,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-	</div><!-- .wcatcn-container -->
 
 </div><!-- .wcatcn-wrapper -->
