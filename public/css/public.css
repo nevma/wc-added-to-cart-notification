@@ -1,0 +1,105 @@
+/**
+ * Public CSS
+ */
+
+@import url('fonts.css');
+
+.wcatcn-wrapper {
+	box-sizing: border-box;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	transition: transform 1s;
+	z-index: 1000;
+	border: 3px solid #999;
+	border-bottom: none;
+	padding: 1em;
+	max-height: 40vh;
+	overflow-y: scroll;
+	background: white;
+	transform: translateY(100%);
+	font-size: 14px;
+}
+
+	.wcatcn-wrapper h2 {
+		font-size: 1.28em;
+	}
+
+/* Positioning */
+
+.wcatcn-wrapper.bottom-left,
+.wcatcn-wrapper.bottom-right {
+	max-width: 30vw;
+	max-height: 75vh;
+}
+.wcatcn-wrapper.bottom-left {
+	left: 0;
+	right: auto;
+	transform: translateX(-100%);
+	border-left: none;
+}
+.wcatcn-wrapper.bottom-right {
+	left: auto;
+	right: 0;
+	transform: translateX(100%);
+	border-right: none;
+}
+
+.wcatcn-wrapper.bottom:not(.bottom-left):not(.bottom-right) {
+	border-left: none;
+	border-right: none;
+}
+
+/* Activation */
+.wcatcn-wrapper.active {
+	transform: none !important;
+}
+
+/* Dismissal */
+.wcatcn-dismiss-container {
+	margin-bottom: 1em;
+	text-align: center;
+}
+.wcatcn-wrapper.bottom-right .wcatcn-dismiss-container {
+	text-align: left;
+}
+.wcatcn-wrapper.bottom-left .wcatcn-dismiss-container {
+	text-align: right;
+}
+
+	.wcatcn-dismiss {
+		display: inline-block;
+		font-size: 1.5em;
+	}
+
+		.wcatcn-dismiss:after {
+			font-family: 'wcatcn' !important;
+			display: inline-block;
+			content: "\e907";
+			margin-left: 0.3em;
+		}
+		.wcatcn-wrapper.bottom-right .wcatcn-dismiss:after {
+			content: "\e905";
+			margin-left: 0.3em;
+		}
+		.wcatcn-wrapper.bottom-left .wcatcn-dismiss:after {
+			content: "\e906";
+			margin-left: 0.3em;
+		}
+
+/* MINI CART */
+
+.wcatcn-mini-cart-container .mini_cart_item .remove {
+	float: left;
+}
+
+/* CROSS SELLS */
+
+.wcatcn-cross-sells-container .products .product {
+	width: 23.5%;
+	margin-left: 2%;
+}
+.wcatcn-cross-sells-container .products .product.first {
+	margin-left: 0%;
+}
