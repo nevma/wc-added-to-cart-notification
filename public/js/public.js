@@ -45,7 +45,13 @@ WCATCN.init = function() {
 		// Dismiss the notification when the "Hide" option is clicked
 		this.$dismiss.on( 'click', this.deactivate.bind( this ) );
 
-		this.$notification.on( 'mouseover', this.onMouseOver.bind( this ) );
+		jQuery( (function() {
+
+			this.$notification.hover(
+				this.cancelDismissal.bind( this ),
+				this.scheduleDismissalDelayed.bind( this ) );
+
+		}).bind( this ) );
 
 	}
 
@@ -63,7 +69,7 @@ WCATCN.activate = function() {
 	this.$notification.addClass( 'active' );
 
 	// Schedule dismissal on the main timeout
-	this.scheduleDismissal( this.options.deactivationTimeout );
+	this.scheduleDismissal();
 }
 
 /**
@@ -79,7 +85,7 @@ WCATCN.deactivate = function() {
 	this.log( 'Deactivating' );
 
 	// Cancel any already scheduled dismissal just in case.
-	clearTimeout( this.timeoutHandler );
+	this.cancelDismissal();
 
 	// Deactivate
 	this.$notification.removeClass( 'active' );
@@ -87,22 +93,31 @@ WCATCN.deactivate = function() {
 	return false;
 }
 
-WCATCN.scheduleDismissal = function( timeout ) {
+WCATCN.cancelDismissal = function() {
 
-	this.log( 'Scheduling dismissal in ' + timeout + ' ms' );
-
-	// Cancel any already scheduled dismissals
 	clearTimeout( this.timeoutHandler );
-
-	// Schedule anew
-	this.timeoutHandler = setTimeout( this.deactivate.bind( this ), timeout );
 }
 
-WCATCN.onMouseOver = function() {
+WCATCN.scheduleDismissal = function() {
 
-	// Schedule dismissal on the extended timeout
-	this.scheduleDismissal( this.options.deactivationTimeoutExtended );
+	this.log( 'Scheduling dismissal' );
 
+	// Cancel any already scheduled dismissals
+	this.cancelDismissal();
+
+	// Schedule anew
+	this.timeoutHandler = setTimeout( this.deactivate.bind( this ), this.options.deactivationTimeout );
+}
+
+WCATCN.scheduleDismissalDelayed = function() {
+
+	this.log( 'Scheduling delayed dismissal' );
+
+	// Cancel any already scheduled dismissals
+	this.cancelDismissal();
+
+	// Schedule anew
+	this.timeoutHandler = setTimeout( this.deactivate.bind( this ), this.options.deactivationTimeoutExtended );
 }
 
 WCATCN.log = function( message ) {
@@ -114,8 +129,9 @@ WCATCN.log = function( message ) {
 	}
 }
 
+// Initialise WCATCN on DOMContentLoaded
 
-jQuery( function ( $ ) {
+jQuery( function() {
 
 	WCATCN.init();
 
