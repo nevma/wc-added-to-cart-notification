@@ -11,12 +11,15 @@ WCATCN.defaults = {
 	'activationEvent'             : 'added_to_cart',
 	'element'                     : '.wcatcn-wrapper',
 	'dismiss'                     : '.wcatcn-dismiss',
+	'debug'                       : false,
 
 }
 
 WCATCN.init = function() {
 
 	this.options = this.defaults;
+
+	this.options.debug = true;
 
 	// Cache elements
 	this.$body = jQuery( document.body );
@@ -42,6 +45,8 @@ WCATCN.init = function() {
 		// Dismiss the notification when the "Hide" option is clicked
 		this.$dismiss.on( 'click', this.deactivate.bind( this ) );
 
+		this.$notification.on( 'mouseover', this.onMouseOver.bind( this ) );
+
 	}
 
 }
@@ -52,14 +57,13 @@ WCATCN.init = function() {
  */
 WCATCN.activate = function() {
 
-	// Prevent deactivation, if scheduled
-	clearTimeout( this.timeoutHandler );
-	
+	this.log( 'Activating' );
+
 	// Enable the notification
 	this.$notification.addClass( 'active' );
 
-	// Set a deactivation timeout anew.
-	this.timeoutHandler = setTimeout( this.deactivate, this.options.deactivationTimeout );
+	// Schedule dismissal on the main timeout
+	this.scheduleDismissal( this.options.deactivationTimeout );
 }
 
 /**
@@ -71,12 +75,43 @@ WCATCN.activate = function() {
  * deactivation scheduled.
  */
 WCATCN.deactivate = function() {
-	
-	this.$notification.removeClass( 'active' );
 
+	this.log( 'Deactivating' );
+
+	// Cancel any already scheduled dismissal just in case.
 	clearTimeout( this.timeoutHandler );
 
+	// Deactivate
+	this.$notification.removeClass( 'active' );
+
 	return false;
+}
+
+WCATCN.scheduleDismissal = function( timeout ) {
+
+	this.log( 'Scheduling dismissal in ' + timeout + ' ms' );
+
+	// Cancel any already scheduled dismissals
+	clearTimeout( this.timeoutHandler );
+
+	// Schedule anew
+	this.timeoutHandler = setTimeout( this.deactivate, timeout );
+}
+
+WCATCN.onMouseOver = function() {
+
+	// Schedule dismissal on the extended timeout
+	this.scheduleDismissal( this.options.deactivationTimeoutExtended );
+
+}
+
+WCATCN.log = function( message ) {
+
+	if ( this.options.debug ) {
+
+		console.log( 'WCATCN: ' + message );
+
+	}
 }
 
 
