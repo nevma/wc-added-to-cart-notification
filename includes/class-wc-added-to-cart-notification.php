@@ -84,7 +84,7 @@ class WC_Added_To_Cart_Notification {
 	 */
 	protected function __construct() {
 
-		$this->plugin_name = 'wc-added-to-cart-notification';
+		$this->plugin_name = 'wcatcn';
 		$this->version = '1.0.0';
 
 		$this->load_dependencies();

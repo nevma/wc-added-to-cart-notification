@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'wcatcn';
-  src:  url('../fonts/wc-added-to-cart-notification.eot?z307no');
-  src:  url('../fonts/wc-added-to-cart-notification.eot?z307no#iefix') format('embedded-opentype'),
-    url('../fonts/wc-added-to-cart-notification.ttf?z307no') format('truetype'),
-    url('../fonts/wc-added-to-cart-notification.woff?z307no') format('woff'),
-    url('../fonts/wc-added-to-cart-notification.svg?z307no#wc-added-to-cart-notification') format('svg');
+  src:  url('../fonts/wcatcn.eot?z307no');
+  src:  url('../fonts/wcatcn.eot?z307no#iefix') format('embedded-opentype'),
+    url('../fonts/wcatcn.ttf?z307no') format('truetype'),
+    url('../fonts/wcatcn.woff?z307no') format('woff'),
+    url('../fonts/wcatcn.svg?z307no#wcatcn') format('svg');
   font-weight: normal;
   font-style: normal;
 }

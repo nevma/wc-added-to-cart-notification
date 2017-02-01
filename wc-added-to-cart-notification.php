@@ -15,7 +15,7 @@
  * Author URI:        https://www.nevma.gr
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       wc-added-to-cart-notification
+ * Text Domain:       wcatcn
  * Domain Path:       /languages
  */
 
