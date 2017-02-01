@@ -60,10 +60,18 @@ class WC_Added_To_Cart_Notification {
 	/**
 	 * The single instance of the class.
 	 *
-	 * @since 1.0.0
-	 * @var WC_Added_To_Cart_Notification The main instance of this plugin.
+	 * @since    1.0.0
+	 * @var      WC_Added_To_Cart_Notification The main instance of this plugin.
 	 */
 	protected static $_instance;
+
+	/**
+	 * The plugin's options.
+	 *
+	 * @since    1.0.1
+	 * @var      array $options The plugin's options
+	 */
+	protected $options;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -81,6 +89,7 @@ class WC_Added_To_Cart_Notification {
 
 		$this->load_dependencies();
 		$this->set_locale();
+		$this->load_options();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
@@ -183,6 +192,53 @@ class WC_Added_To_Cart_Notification {
 	}
 
 	/**
+	 * Load the plugin's options
+	 *
+	 * @since  1.0.1
+	 * @access private
+	 */
+	private function load_options() {
+
+		$this->options = get_option( 'wcatcn_options', $this->get_default_options() );
+
+	}
+
+	/**
+	 * Update the plugin's options
+	 *
+	 * @since  1.0.1
+	 * @param array The new options
+	 * @access private
+	 */
+	private function update_options( $options ) {
+
+		return update_option( 'wcatcn_options', $options );
+
+	}
+
+	/**
+	 * Get the plugin's default options
+	 *
+	 * @since  1.0.1
+	 * @return array The default options
+	 * @access private
+	 */
+	private function get_default_options() {
+
+		$defaults = array(
+			'notification' => array(
+				'autoClose'                   => true,
+				'deactivationTimeout'         => 5000,
+				'deactivationTimeoutExtended' => 1000,
+				'debug'                       => false,	
+			),
+		);
+
+		return $defaults;
+
+	}
+
+	/**
 	 * Register all of the hooks related to the admin area functionality
 	 * of the plugin.
 	 *
@@ -207,7 +263,7 @@ class WC_Added_To_Cart_Notification {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new WCATCN_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new WCATCN_Public( $this->get_plugin_name(), $this->get_version(), $this->options );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );

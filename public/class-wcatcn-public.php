@@ -41,16 +41,26 @@ class WCATCN_Public {
 	private $version;
 
 	/**
+	 * The plugin's options.
+	 *
+	 * @since    1.0.1
+	 * @access   private
+	 * @var      array     $options    The plugin's options.
+	 */
+	private $options;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct( $plugin_name, $version, $options ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->options = $options;
 
 		$this->add_notification_components();
 
@@ -75,6 +85,8 @@ class WCATCN_Public {
 	public function enqueue_scripts() {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/public.js', array( 'jquery' ), $this->version, true );
+
+		wp_localize_script( $this->plugin_name, 'WCATCNOptions', $this->options['notification'] );
 
 	}
 

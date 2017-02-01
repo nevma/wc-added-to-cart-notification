@@ -18,7 +18,8 @@ WCATCN.defaults = {
 
 WCATCN.init = function() {
 
-	this.options = this.defaults;
+	// Extend the defaults with the options passed from WordPress
+	this.options = jQuery.extend( {}, this.defaults, WCATCNOptions );
 
 	// Cache elements
 	this.$body         = jQuery( document.body );
