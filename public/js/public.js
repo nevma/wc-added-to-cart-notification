@@ -6,6 +6,7 @@ var WCATCN = {};
  */
 WCATCN.defaults = {
 
+	'autoClose'                   : true,
 	'deactivationTimeout'         : 5000,
 	'deactivationTimeoutExtended' : 1000,
 	'activationEvent'             : 'added_to_cart',
@@ -46,13 +47,17 @@ WCATCN.init = function() {
 	}
 
 	// Postpone the auto deactivation on hover
-	jQuery( (function() {
+	if ( this.options.autoClose ) {
 
-		this.$notification.hover(
-			this.cancelDeactivation.bind( this ),
-			this.scheduleDeactivationDelayed.bind( this ) );
+		jQuery( (function() {
 
-	}).bind( this ) );
+			this.$notification.hover(
+				this.cancelDeactivation.bind( this ),
+				this.scheduleDeactivationDelayed.bind( this ) );
+
+		}).bind( this ) );
+
+	}
 
 }
 
@@ -68,7 +73,10 @@ WCATCN.activate = function() {
 	this.$notification.addClass( 'active' );
 
 	// Schedule deactivation on the main timeout
-	this.scheduleDeactivation();
+	if ( this.options.autoClose ) {
+		this.scheduleDeactivation();
+	}
+
 }
 
 /**
