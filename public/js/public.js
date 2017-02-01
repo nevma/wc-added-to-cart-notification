@@ -9,8 +9,8 @@ WCATCN.defaults = {
 	'deactivationTimeout'         : 5000,
 	'deactivationTimeoutExtended' : 1000,
 	'activationEvent'             : 'added_to_cart',
-	'element'                     : '.wcatcn-wrapper',
-	'dismiss'                     : '.wcatcn-dismiss',
+	'container'                   : '.wcatcn-wrapper',
+	'closeButton'                 : '.wcatcn-dismiss',
 	'debug'                       : false,
 
 }
@@ -19,12 +19,10 @@ WCATCN.init = function() {
 
 	this.options = this.defaults;
 
-	this.options.debug = true;
-
 	// Cache elements
-	this.$body = jQuery( document.body );
-	this.$notification = jQuery( this.options.element );
-	this.$dismiss = jQuery( this.options.dismiss );
+	this.$body         = jQuery( document.body );
+	this.$notification = jQuery( this.options.container );
+	this.$closeButton  = jQuery( this.options.closeButton );
 
 	// Bail if notification element doesn't exist
 	if ( ! this.$notification.length ) {
@@ -40,20 +38,21 @@ WCATCN.init = function() {
 	// Activate the notification on the added_to_cart event
 	this.$body.on( this.options.activationEvent, this.activate.bind( this ) );
 
-	if ( this.$dismiss.length > 0 ) {
+	// Dismiss the notification on clicking the close button
+	if ( this.$closeButton.length > 0 ) {
 
-		// Dismiss the notification when the "Hide" option is clicked
-		this.$dismiss.on( 'click', this.deactivate.bind( this ) );
-
-		jQuery( (function() {
-
-			this.$notification.hover(
-				this.cancelDismissal.bind( this ),
-				this.scheduleDismissalDelayed.bind( this ) );
-
-		}).bind( this ) );
+		this.$closeButton.on( 'click', this.deactivate.bind( this ) );
 
 	}
+
+	// Postpone the auto deactivation on hover
+	jQuery( (function() {
+
+		this.$notification.hover(
+			this.cancelDeactivation.bind( this ),
+			this.scheduleDeactivationDelayed.bind( this ) );
+
+	}).bind( this ) );
 
 }
 
@@ -68,24 +67,22 @@ WCATCN.activate = function() {
 	// Enable the notification
 	this.$notification.addClass( 'active' );
 
-	// Schedule dismissal on the main timeout
-	this.scheduleDismissal();
+	// Schedule deactivation on the main timeout
+	this.scheduleDeactivation();
 }
 
 /**
- * Deactivates (hides) the notification, and clears the deactivation
- * timeout.
- *
- * Clearing the deactivation timeout is necessary since the notification
- * can be dismissed on-demand by the user, thus leaving a stray
- * deactivation scheduled.
+ * Deactivates (hides) the notification.
  */
 WCATCN.deactivate = function() {
 
 	this.log( 'Deactivating' );
 
-	// Cancel any already scheduled dismissal just in case.
-	this.cancelDismissal();
+	/*
+	 * Cancel a possibly scheduled future deactivation, in case this one was
+	 * triggered by clicking on the Hide button.
+	 */
+	this.cancelDeactivation();
 
 	// Deactivate
 	this.$notification.removeClass( 'active' );
@@ -93,30 +90,28 @@ WCATCN.deactivate = function() {
 	return false;
 }
 
-WCATCN.cancelDismissal = function() {
+WCATCN.cancelDeactivation = function() {
 
 	clearTimeout( this.timeoutHandler );
 }
 
-WCATCN.scheduleDismissal = function() {
+WCATCN.scheduleDeactivation = function() {
 
-	this.log( 'Scheduling dismissal' );
+	this.log( 'Scheduling deactivation' );
 
-	// Cancel any already scheduled dismissals
-	this.cancelDismissal();
+	// Schedule the deactivation anew
+	this.cancelDeactivation();
 
-	// Schedule anew
 	this.timeoutHandler = setTimeout( this.deactivate.bind( this ), this.options.deactivationTimeout );
 }
 
-WCATCN.scheduleDismissalDelayed = function() {
+WCATCN.scheduleDeactivationDelayed = function() {
 
-	this.log( 'Scheduling delayed dismissal' );
+	this.log( 'Scheduling delayed deactivation' );
 
-	// Cancel any already scheduled dismissals
-	this.cancelDismissal();
+	// Schedule the deactivation anew
+	this.cancelDeactivation();
 
-	// Schedule anew
 	this.timeoutHandler = setTimeout( this.deactivate.bind( this ), this.options.deactivationTimeoutExtended );
 }
 
