@@ -95,7 +95,7 @@ WCATCN.scheduleDismissal = function( timeout ) {
 	clearTimeout( this.timeoutHandler );
 
 	// Schedule anew
-	this.timeoutHandler = setTimeout( this.deactivate, timeout );
+	this.timeoutHandler = setTimeout( this.deactivate.bind( this ), timeout );
 }
 
 WCATCN.onMouseOver = function() {
