@@ -86,7 +86,7 @@ class WCATCN_Public {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/public.js', array( 'jquery' ), $this->version, true );
 
-		wp_localize_script( $this->plugin_name, 'WCATCNOptions', $this->options['notification'] );
+		wp_localize_script( $this->plugin_name, $this->plugin_name . 'Options', $this->options['notification'] );
 
 	}
 

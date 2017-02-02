@@ -18,13 +18,32 @@ WCATCN.defaults = {
 
 WCATCN.init = function() {
 
+	/**
+	 * Internet Explorer (at least up to version 10) does not support the console
+	 * group and groupEnd functions, so we point them to the usual log function.
+	 */
+	if ( typeof console.group === 'undefined' || typeof console.groupEnd === 'undefined' ) {
+
+		console.group    = console.log;
+		console.groupEnd = console.log;
+
+	}
+
+
 	// Extend the defaults with the options passed from WordPress
-	this.options = jQuery.extend( {}, this.defaults, WCATCNOptions );
+	this.options = jQuery.extend( {}, this.defaults, wcatcnOptions );
+
 
 	// Cache elements
 	this.$body         = jQuery( document.body );
 	this.$notification = jQuery( this.options.container );
 	this.$closeButton  = jQuery( this.options.closeButton );
+	
+	this.log( 'Initialisation finished.', 'Options', this.options );
+
+}
+
+WCATCN.run = function() {
 
 	// Bail if notification element doesn't exist
 	if ( ! this.$notification.length ) {
@@ -124,11 +143,19 @@ WCATCN.scheduleDeactivationDelayed = function() {
 	this.timeoutHandler = setTimeout( this.deactivate.bind( this ), this.options.deactivationTimeoutExtended );
 }
 
-WCATCN.log = function( message ) {
+WCATCN.log = function() {
 
 	if ( this.options.debug ) {
 
-		console.log( 'WCATCN: ' + message );
+		console.group( 'WCATCN' );
+		
+		for ( var k in arguments ) {
+
+			console.log( arguments[k] );
+
+		}
+
+		console.groupEnd();
 
 	}
 }
@@ -138,5 +165,7 @@ WCATCN.log = function( message ) {
 jQuery( function() {
 
 	WCATCN.init();
+
+	WCATCN.run();
 
 });
