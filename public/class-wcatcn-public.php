@@ -62,8 +62,6 @@ class WCATCN_Public {
 		$this->version = $version;
 		$this->options = $options;
 
-		$this->add_notification_components();
-
 	}
 
 	/**
@@ -98,7 +96,7 @@ class WCATCN_Public {
 	public function display() {
 
 		// Display only on WooCommerce pages.
-		if ( ! apply_filters( 'wcatcn_display', is_woocommerce() ) ) {
+		if ( ! apply_filters( 'wcatcn_display', function_exists( 'is_woocommerce' ) && is_woocommerce() ) ) {
 
 			return;
 
@@ -229,21 +227,6 @@ class WCATCN_Public {
 
 		return $fragments;
 		
-	}
-
-	/**
-	 * Add the notification components to the display action.
-	 *
-	 * The components are added as actions so as to let plugins and themes
-	 * change their order, or disable some or all of them alltogether.
-	 *
-	 * @since  1.0.0
-	 */
-	private function add_notification_components() {
-
-		add_action( 'wcatcn_display_components', array( $this, 'mini_cart' ) );
-		add_action( 'wcatcn_display_components', array( $this, 'cross_sells' ) );
-
 	}
 
 }
