@@ -187,6 +187,9 @@ class WC_Added_To_Cart_Notification {
 
 		$this->options = get_option( 'wcatcn_options', $this->get_default_options() );
 
+		// For now, expose a filter for the plugin's options, as a quick & dirty solution until a proper settings page is impemented.
+		$this->options = apply_filters( 'wcatcn_options', $this->options );
+
 	}
 
 	/**
