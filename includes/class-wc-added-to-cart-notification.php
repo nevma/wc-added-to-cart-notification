@@ -77,10 +77,15 @@ class WC_Added_To_Cart_Notification {
 		$this->plugin_name = 'wcatcn';
 		$this->version = '1.0.0';
 
+		// Disabled for now since options can only be modified via the theme, with a hook, and thus their loading needs to be delayed until the `after_setup_theme` hook.
+		// $this->load_options();
+		
 		$this->load_dependencies();
 		$this->set_locale();
-		$this->load_options();
 		$this->load_admin_side();
+
+		// Delay the loading of options until the theme has been setup, to allow it to handle theme via a filter.
+		add_action( 'after_setup_theme', array( $this, 'load_options' ) );
 
 		// Delay the public-facing side initialization until `template_redirect`, so that all necessary information (user capabilities, conditional tags) is available
 		add_action( 'template_redirect', array( $this, 'load_public_side' ) );
@@ -181,9 +186,9 @@ class WC_Added_To_Cart_Notification {
 	 * Load the plugin's options
 	 *
 	 * @since  1.1.0
-	 * @access private
+	 * @access public
 	 */
-	private function load_options() {
+	public function load_options() {
 
 		$this->options = get_option( 'wcatcn_options', $this->get_default_options() );
 
