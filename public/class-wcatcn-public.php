@@ -102,11 +102,11 @@ class WCATCN_Public {
 
 		}
 
-		WCATCN_Loader::get_template( 'wrapper', 'start' );
+		WCATCN_Template_Loader::get_template( 'wrapper', 'start' );
 
 		do_action( 'wcatcn_display_components' );
 
-		WCATCN_Loader::get_template( 'wrapper', 'end' );
+		WCATCN_Template_Loader::get_template( 'wrapper', 'end' );
 
 	}
 
@@ -117,7 +117,7 @@ class WCATCN_Public {
 	 */
 	public function mini_cart() {
 
-		WCATCN_Loader::get_template( 'mini-cart' );
+		WCATCN_Template_Loader::get_template( 'mini-cart' );
 
 	}
 
@@ -160,7 +160,7 @@ class WCATCN_Public {
 		add_filter( 'woocommerce_cross_sells_total', array( $this, 'filter_cross_sells_total' ), 999 );
 		add_filter( 'woocommerce_cross_sells_columns', array( $this, 'filter_cross_sells_columns' ), 999 );
 
-		WCATCN_Loader::get_template( 'cross-sells' );
+		WCATCN_Template_Loader::get_template( 'cross-sells' );
 
 		remove_filter( 'woocommerce_cross_sells_total', array( $this, 'filter_cross_sells_total' ), 999 );
 		remove_filter( 'woocommerce_cross_sells_columns', array( $this, 'filter_cross_sells_columns' ), 999 );
