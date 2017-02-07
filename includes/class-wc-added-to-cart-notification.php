@@ -30,16 +30,6 @@
 class WC_Added_To_Cart_Notification {
 
 	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power
-	 * the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   protected
-	 * @var      WCATCN_Loader    $loader    Maintains and registers all hooks for the plugin.
-	 */
-	protected $loader;
-
-	/**
 	 * The unique identifier of this plugin.
 	 *
 	 * @since    1.0.0
@@ -90,8 +80,10 @@ class WC_Added_To_Cart_Notification {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->load_options();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
+		$this->load_admin_side();
+
+		// Delay the public-facing side initialization until `template_redirect`, so that all necessary information (user capabilities, conditional tags) is available
+		add_action( 'template_redirect', array( $this, 'load_public_side' ) );
 
 	}
 
@@ -134,13 +126,10 @@ class WC_Added_To_Cart_Notification {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - WCATCN_Loader. Orchestrates the hooks of the plugin.
+	 * - WCATCN_Template_Loader. Handles templates for the public-facing side.
 	 * - WCATCN_i18n. Defines internationalization functionality.
 	 * - WCATCN_Admin. Defines all hooks for the admin area.
 	 * - WCATCN_Public. Defines all hooks for the public side of the site.
-	 *
-	 * Create an instance of the loader which will be used to register the hooks
-	 * with WordPress.
 	 *
 	 * @since    1.0.0
 	 * @access   private
@@ -148,10 +137,9 @@ class WC_Added_To_Cart_Notification {
 	private function load_dependencies() {
 
 		/**
-		 * The class responsible for orchestrating the actions and filters of the
-		 * core plugin.
+		 * The class responsible for handling templates for the public-facing side.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wcatcn-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wcatcn-template-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
@@ -170,8 +158,6 @@ class WC_Added_To_Cart_Notification {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wcatcn-public.php';
 
-		$this->loader = new WCATCN_Loader();
-
 	}
 
 	/**
@@ -187,7 +173,7 @@ class WC_Added_To_Cart_Notification {
 
 		$plugin_i18n = new WCATCN_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+		add_action( 'plugins_loaded', array( $plugin_i18n, 'load_plugin_textdomain' ) );
 
 	}
 
@@ -226,12 +212,12 @@ class WC_Added_To_Cart_Notification {
 	private function get_default_options() {
 
 		$defaults = array(
-			'notification' => array(
-				'autoClose'                   => true,
-				'deactivationTimeout'         => 5000,
-				'deactivationTimeoutExtended' => 1000,
-				'debug'                       => false,	
-			),
+			'enabled'                     => false,
+			'preview'                     => false,
+			'autoClose'                   => true,
+			'deactivationTimeout'         => 5000,
+			'deactivationTimeoutExtended' => 1000,
+			'debug'                       => false,
 		);
 
 		return $defaults;
@@ -239,51 +225,40 @@ class WC_Added_To_Cart_Notification {
 	}
 
 	/**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
+	 * Load the admin-facing functionality of the plugin.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function load_admin_side() {
 
 		$plugin_admin = new WCATCN_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $plugin_admin, 'enqueue_scripts' ) );
 
 	}
 
 	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
+	 * Load the public-facing functionality of the plugin.
 	 *
-	 * @since    1.0.0
-	 * @access   private
+	 * @since    1.1.0
+	 * @access   public
 	 */
-	private function define_public_hooks() {
+	public function load_public_side() {
+
+		$is_enabled = $this->options['enabled'];
+		$preview_mode = $this->options['preview'];
+
+		// Bail if plugin is disabled, or preview mode is enabled but current user lacks privileges
+		if ( ! $is_enabled
+			|| $preview_mode && ! current_user_can( 'manage_options' ) ) {
+
+			return;
+		}
 
 		$plugin_public = new WCATCN_Public( $this->get_plugin_name(), $this->get_version(), $this->options );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
-		$this->loader->add_action( 'wp_footer', $plugin_public, 'display' );
-		
-		$this->loader->add_action( 'woocommerce_add_to_cart_fragments', $plugin_public, 'filter_cart_fragments' );
-
-		$this->loader->add_action( 'wcatcn_display_components', $plugin_public, 'mini_cart' );
-		$this->loader->add_action( 'wcatcn_display_components', $plugin_public, 'cross_sells' );
-
-	}
-
-	/**
-	 * Run the loader to execute all of the hooks with WordPress.
-	 *
-	 * @since    1.0.0
-	 */
-	public function run() {
-		$this->loader->run();
 	}
 
 	/**
@@ -295,16 +270,6 @@ class WC_Added_To_Cart_Notification {
 	 */
 	public function get_plugin_name() {
 		return $this->plugin_name;
-	}
-
-	/**
-	 * The reference to the class that orchestrates the hooks with the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    WCATCN_Loader    Orchestrates the hooks of the plugin.
-	 */
-	public function get_loader() {
-		return $this->loader;
 	}
 
 	/**

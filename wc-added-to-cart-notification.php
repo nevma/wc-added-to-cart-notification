@@ -63,4 +63,4 @@ function wcatcn() {
 
 }
 
-wcatcn()->run();
+wcatcn();
