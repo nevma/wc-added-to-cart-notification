@@ -80,8 +80,10 @@ class WC_Added_To_Cart_Notification {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->load_options();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
+		$this->load_admin_side();
+
+		// Delay the public-facing side initialization until `template_redirect`, so that all necessary information (user capabilities, conditional tags) is available
+		add_action( 'template_redirect', array( $this, 'load_public_side' ) );
 
 	}
 
@@ -210,12 +212,12 @@ class WC_Added_To_Cart_Notification {
 	private function get_default_options() {
 
 		$defaults = array(
-			'notification' => array(
-				'autoClose'                   => true,
-				'deactivationTimeout'         => 5000,
-				'deactivationTimeoutExtended' => 1000,
-				'debug'                       => false,	
-			),
+			'enabled'                     => false,
+			'preview'                     => false,
+			'autoClose'                   => true,
+			'deactivationTimeout'         => 5000,
+			'deactivationTimeoutExtended' => 1000,
+			'debug'                       => false,
 		);
 
 		return $defaults;
@@ -223,13 +225,12 @@ class WC_Added_To_Cart_Notification {
 	}
 
 	/**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
+	 * Load the admin-facing functionality of the plugin.
 	 *
-	 * @since    1.0.0
+	 * @since    1.1.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function load_admin_side() {
 
 		$plugin_admin = new WCATCN_Admin( $this->get_plugin_name(), $this->get_version() );
 
@@ -239,25 +240,24 @@ class WC_Added_To_Cart_Notification {
 	}
 
 	/**
-	 * Register all of the hooks related to the public-facing functionality
-	 * of the plugin.
+	 * Load the public-facing functionality of the plugin.
 	 *
-	 * @since    1.0.0
-	 * @access   private
+	 * @since    1.1.0
+	 * @access   public
 	 */
-	private function define_public_hooks() {
+	public function load_public_side() {
+
+		$is_enabled = $this->options['enabled'];
+		$preview_mode = $this->options['preview'];
+
+		// Bail if plugin is disabled, or preview mode is enabled but current user lacks privileges
+		if ( ! $is_enabled
+			|| $preview_mode && ! current_user_can( 'manage_options' ) ) {
+
+			return;
+		}
 
 		$plugin_public = new WCATCN_Public( $this->get_plugin_name(), $this->get_version(), $this->options );
-
-		add_action( 'wp_enqueue_scripts', array( $plugin_public, 'enqueue_styles' ) );
-		add_action( 'wp_enqueue_scripts', array( $plugin_public, 'enqueue_scripts' ) );
-
-		add_action( 'wp_footer', array( $plugin_public, 'display' ) );
-		
-		add_action( 'woocommerce_add_to_cart_fragments', array( $plugin_public, 'filter_cart_fragments' ) );
-
-		add_action( 'wcatcn_display_components', array( $plugin_public, 'mini_cart' ) );
-		add_action( 'wcatcn_display_components', array( $plugin_public, 'cross_sells' ) );
 
 	}
 

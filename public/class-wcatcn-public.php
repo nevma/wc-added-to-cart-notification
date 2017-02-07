@@ -62,6 +62,25 @@ class WCATCN_Public {
 		$this->version = $version;
 		$this->options = $options;
 
+		// Display only on WooCommerce pages.
+		if ( apply_filters( 'wcatcn_display', function_exists( 'is_woocommerce' ) && is_woocommerce() ) ) {
+
+			// Enqueue scripts and styles
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+			// Schedule the main display action
+			add_action( 'wp_footer', array( $this, 'display' ) );
+			
+			// Add the default components
+			add_action( 'wcatcn_display_components', array( $this, 'mini_cart' ) );
+			add_action( 'wcatcn_display_components', array( $this, 'cross_sells' ) );
+
+			// Add the plugin's cart fragments
+			add_action( 'woocommerce_add_to_cart_fragments', array( $this, 'filter_cart_fragments' ) );
+
+		}
+
 	}
 
 	/**
@@ -84,7 +103,7 @@ class WCATCN_Public {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/public.js', array( 'jquery' ), $this->version, true );
 
-		wp_localize_script( $this->plugin_name, $this->plugin_name . 'Options', $this->options['notification'] );
+		wp_localize_script( $this->plugin_name, $this->plugin_name . 'Options', $this->options );
 
 	}
 
@@ -94,13 +113,6 @@ class WCATCN_Public {
 	 * @since 1.0.0
 	 */
 	public function display() {
-
-		// Display only on WooCommerce pages.
-		if ( ! apply_filters( 'wcatcn_display', function_exists( 'is_woocommerce' ) && is_woocommerce() ) ) {
-
-			return;
-
-		}
 
 		WCATCN_Template_Loader::get_template( 'wrapper', 'start' );
 
