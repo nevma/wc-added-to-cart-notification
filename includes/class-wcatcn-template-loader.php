@@ -4,7 +4,7 @@
  * Handle templates for the public-facing side.
  *
  * @link       https://www.nevma.gr
- * @since      1.0.1
+ * @since      1.1.0
  *
  * @package    Wc_Added_To_Cart_Notification
  * @subpackage Wc_Added_To_Cart_Notification/includes

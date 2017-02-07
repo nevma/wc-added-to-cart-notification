@@ -43,7 +43,7 @@ class WCATCN_Public {
 	/**
 	 * The plugin's options.
 	 *
-	 * @since    1.0.1
+	 * @since    1.1.0
 	 * @access   private
 	 * @var      array     $options    The plugin's options.
 	 */

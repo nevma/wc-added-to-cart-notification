@@ -58,7 +58,7 @@ class WC_Added_To_Cart_Notification {
 	/**
 	 * The plugin's options.
 	 *
-	 * @since    1.0.1
+	 * @since    1.1.0
 	 * @var      array $options The plugin's options
 	 */
 	protected $options;
@@ -180,7 +180,7 @@ class WC_Added_To_Cart_Notification {
 	/**
 	 * Load the plugin's options
 	 *
-	 * @since  1.0.1
+	 * @since  1.1.0
 	 * @access private
 	 */
 	private function load_options() {
@@ -195,7 +195,7 @@ class WC_Added_To_Cart_Notification {
 	/**
 	 * Update the plugin's options
 	 *
-	 * @since  1.0.1
+	 * @since  1.1.0
 	 * @param array The new options
 	 * @access private
 	 */
@@ -208,7 +208,7 @@ class WC_Added_To_Cart_Notification {
 	/**
 	 * Get the plugin's default options
 	 *
-	 * @since  1.0.1
+	 * @since  1.1.0
 	 * @return array The default options
 	 * @access private
 	 */
@@ -253,11 +253,25 @@ class WC_Added_To_Cart_Notification {
 		$is_enabled = $this->options['enabled'];
 		$preview_mode = $this->options['preview'];
 
-		// Bail if plugin is disabled, or preview mode is enabled but current user lacks privileges
-		if ( ! $is_enabled
-			|| $preview_mode && ! current_user_can( 'manage_options' ) ) {
+		// Bail if plugin is disabled
+		if ( ! $is_enabled ) {
 
 			return;
+
+		}
+
+		// Bail if preview mode is enabled but current user lacks privileges
+		if ( $preview_mode ) {
+
+			$current_user = wp_get_current_user();
+
+			if ( ! in_array( 'administrator', $current_user->roles )
+				&& ! in_array( 'shop_manager', $current_user->roles ) ) {
+
+				return;
+
+			}
+
 		}
 
 		$plugin_public = new WCATCN_Public( $this->get_plugin_name(), $this->get_version(), $this->options );
