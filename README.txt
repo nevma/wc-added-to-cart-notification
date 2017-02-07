@@ -19,7 +19,8 @@ So far, the notification includes a mini-cart and a cross-sells section. However
 
 = Admin options area =
 * There is no admin options page for the plugin, yet. It will be added in a future release. *
-Altering the plugin's native behaviour *will* require a little bit of code. See below for more information.
+One can view and change the plugin's options programmatically, using the `wcatcn_options` filter hook. That way the plugin's behavior can be configured.
+One can also configure the notification's contents programmatically. See below for more information.
 
 = Customizing the notification =
 
@@ -51,7 +52,7 @@ De-activate the plugin to disable it. Nothing gets stored to the database, up to
 
 == Frequently Asked Questions ==
 
-= Wher are sections? =
+= What are sections? =
 
 By &quote;section&quote; we refer to an area inside the notification. The mini-cart or the cross-sells are such sections.
 
@@ -72,6 +73,11 @@ Answer to foo bar dilemma.
 == Screenshots ==
 
 == Changelog ==
+
+= 1.1.0 =
+* Implementing plugin options (via PHP). These include a global enable/disable switch, preview mode, auto close switch, debug mode and deactivation timeouts. The plugin's options can be customised via the `wcatcn_options` filter hook (until a proper settings page is implemented).
+* Improved logging functionality. Switch the `debug` plugin option to `true` in order to get logging information, inside the browser's console, on the front-end.
+* &quote;Stickaround&quote; functionality: There are now two timeouts, a basic and an extended one (usually shorter than the basic one). If auto close is enabled, the notification will be hidden after the basic timeout. However if the user hovers on it, it will remain open. When the user hovers out of it, it will be scheduled to close after the extended timeout expires.
 
 = 1.0.0 =
 

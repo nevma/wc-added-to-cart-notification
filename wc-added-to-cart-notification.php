@@ -10,7 +10,7 @@
  * Plugin Name:       Added to cart notification for WooCommerce
  * Plugin URI:        https://github.com/nevma/wc-added-to-cart-notification
  * Description:       Displays a brief, dismissable, responsive notification on the front-end, whenever a product is added to the cart.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Nevma
  * Author URI:        https://www.nevma.gr
  * License:           GPL-2.0+
