@@ -87,8 +87,8 @@ class WC_Added_To_Cart_Notification {
 		// Delay the loading of options until the theme has been setup, to allow it to handle theme via a filter.
 		add_action( 'after_setup_theme', array( $this, 'load_options' ) );
 
-		// Delay the public-facing side initialization until `template_redirect`, so that all necessary information (user capabilities, conditional tags) is available
-		add_action( 'template_redirect', array( $this, 'load_public_side' ) );
+		// Use the `init` hook to load the public-facing side, because it's late enough (plugins have loaded, user roles/capabilities are available), and it also fires on AJAX requests (which are also served by the public module).
+		add_action( 'init', array( $this, 'load_public_side' ) );
 
 	}
 

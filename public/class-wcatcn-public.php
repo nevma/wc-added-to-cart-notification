@@ -62,24 +62,38 @@ class WCATCN_Public {
 		$this->version = $version;
 		$this->options = $options;
 
-		// Display only on WooCommerce pages.
-		if ( apply_filters( 'wcatcn_display', function_exists( 'is_woocommerce' ) && is_woocommerce() ) ) {
+		// Define the plugin's cart fragments (will run either on front-end or AJAX requests)
+		add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'filter_cart_fragments' ) );
 
-			// Enqueue scripts and styles
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		// Postpone the rest of the init process untli `template_redirect`, in order to have conditional tags available.
+		add_action( 'template_redirect', array( $this, 'init' ) );
 
-			// Schedule the main display action
-			add_action( 'wp_footer', array( $this, 'display' ) );
-			
-			// Add the default components
-			add_action( 'wcatcn_display_components', array( $this, 'mini_cart' ) );
-			add_action( 'wcatcn_display_components', array( $this, 'cross_sells' ) );
+	}
 
-			// Add the plugin's cart fragments
-			add_action( 'woocommerce_add_to_cart_fragments', array( $this, 'filter_cart_fragments' ) );
+	/**
+	 * Initialize the public-facing functionality.
+	 * 
+	 * @since 1.1.0
+	 */
+	public function init() {
+
+		// Expose a filter for third parties to determine if the notification should appear on this page
+		if ( ! apply_filters( 'wcatcn_enable', function_exists( 'is_woocommerce' ) && is_woocommerce() ) ) {
+
+			return;
 
 		}
+
+		// Enqueue scripts and styles
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+		// Schedule the main display action
+		add_action( 'wp_footer', array( $this, 'display' ) );
+		
+		// Add the default components
+		add_action( 'wcatcn_display_components', array( $this, 'mini_cart' ) );
+		add_action( 'wcatcn_display_components', array( $this, 'cross_sells' ) );
 
 	}
 
@@ -239,6 +253,17 @@ class WCATCN_Public {
 
 		return $fragments;
 		
+	}
+
+	/**
+	 * Determine whether the current request is a WordPress Ajax request.
+	 * 
+	 * @return bool True if it's a WordPress Ajax request, false otherwise.
+	 */
+	private function doing_ajax() {
+
+		return function_exists( 'wp_doing_ajax' ) ? wp_doing_ajax() : defined( 'DOING_AJAX' ) && DOING_AJAX;
+
 	}
 
 }
