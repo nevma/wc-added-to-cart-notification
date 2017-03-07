@@ -75,9 +75,11 @@ Answer to foo bar dilemma.
 == Changelog ==
 
 = 1.1.0 =
-* Implementing plugin options (via PHP). These include a global enable/disable switch, preview mode, auto close switch, debug mode and deactivation timeouts. The plugin's options can be customised via the `wcatcn_options` filter hook (until a proper settings page is implemented).
+* Added plugin settings, which can only be configured via PHP for the time being. These include a global enable/disable switch, preview mode, auto close switch, debug mode and deactivation timeouts. The plugin's options can be customised via the `wcatcn_options` filter hook (until a proper settings page is implemented).
 * Improved logging functionality. Switch the `debug` plugin option to `true` in order to get logging information, inside the browser's console, on the front-end.
 * &quote;Stickaround&quote; functionality: There are now two timeouts, a basic and an extended one (usually shorter than the basic one). If auto close is enabled, the notification will be hidden after the basic timeout. However if the user hovers on it, it will remain open. When the user hovers out of it, it will be scheduled to close after the extended timeout expires.
+* Responsiveness: The notification now occupies a larger part of the viewport's width (or all of it) on narrower screens, so that its contents remain readable.
+* Added preview mode: if enabled, the notification is only visible to users having the `administrator` or `shop_manager` role.
 
 = 1.0.0 =
 
